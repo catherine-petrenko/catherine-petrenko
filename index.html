@@ -2,7 +2,7 @@
   index.html — Catherine Petrenko (consent-ready)
   - SEO/OG/Twitter/JSON-LD + Yandex verify
   - Cookiebot autoblocking; analytics deferred
-  - Early theme apply (default: dark) + accessible toggle
+  - Early theme apply (no flash) + accessible toggle
   - Hero noscript fallback (portrait + CTA)
   - CTA classes applied reliably (incl. async renders)
 ============================================== -->
@@ -12,12 +12,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
-  <!-- Early theme apply (default: dark) -->
+  <!-- Early theme apply -->
   <script>
     (function () {
       try {
         var saved = localStorage.getItem('theme');
-        var theme = (saved === 'dark' || saved === 'light') ? saved : 'dark';
+        var theme = (saved === 'dark' || saved === 'light')
+          ? saved
+          : (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', theme);
       } catch(e) {
         document.documentElement.setAttribute('data-theme', 'dark');
@@ -138,7 +140,7 @@
           var saved = localStorage.getItem('theme');
           if (saved === 'dark' || saved === 'light') return saved;
         } catch (e) {}
-        return 'dark';
+        return DOC.getAttribute('data-theme') || 'dark';
       }
 
       function setTheme(theme, fade) {
@@ -228,7 +230,3 @@
   </noscript>
 </body>
 </html>
-
-
-
-
